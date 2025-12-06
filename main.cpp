@@ -11,7 +11,15 @@ class Player{
         int runs;
         int wickets;
         public:
-
+        Player(){
+            playerID=0;
+            name="";
+            age=0;
+            role="";
+            matches=0;
+            runs=0;
+            wickets=0;
+        }
         Player(int ID, string n, int a, string r, int m, int ru, int w){
             playerID=ID;
             name=n;
