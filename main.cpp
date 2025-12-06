@@ -124,14 +124,34 @@ class CricketBoard{
     string country;
     int listofteams;
     public:
-
+    CricketBoard(){
+        boardName="No name";
+        country="No country";
+        listofteams=0;
+        boardID=0;
+    }
     CricketBoard(int ID, string n, string c, int lot){
         boardID=ID;
         boardName=n;
         country=c;
         listofteams=lot;
     }
+
     void AddBoard(int boardID, string boardName, string country, int listofteams){
-        cout << "";
+        cout << "----Details----";
+        cout << "Enter the Name of New Cricket Board: ";
+        cin >> boardName;
+        cout << "Enter the Id of your Cricket Board:";
+        cin >> boardID;
+        cout << "Enter the country of your Cricket Board: ";
+        cin >> country;
+        cout << "How much teams are under your Cricket Board: ";
+        cin >> listofteams;
+    }
+    void DisplayBoard(){
+        cout << "Your Board Name is: " << boardName << endl;
+        cout << "Your Board ID is: " << boardID << endl;
+        cout << "Your Board Country is: " << country << endl;
+        cout << "Number of Teams associated with your Board is: " << listofteams << endl;
     }
 };
