@@ -62,3 +62,58 @@ class Player{
             cout << "Updated Total Wickets Taken: " << wickets << endl;
         }
 };
+
+class Team{
+    private:
+        int TeamID;
+        string teamname;
+        string country;
+        int listofplayers[11];
+        public:
+        Team(int TID, string tname, string ctry, int lop[11]){
+            TeamID=TID;
+            teamname=tname;
+            country=ctry;
+            for(int i=0;i<11;i++){
+                listofplayers[i]=lop[i];
+            }
+        }
+        void AddTeam(int TeamID, string teamname, string country, int listofplayers[11]){
+            cout << "---Adding Team Details---" << endl;
+            cout << "Enter Team ID: " << endl;
+            cin >> TeamID;
+            cout << "Enter Team Name: " << endl;
+            cin >> teamname;
+            cout << "Enter Country: " << endl;
+            cin >> country;
+            cout << "Enter Player IDs for 11 Players: " << endl;
+            for(int i=0;i<11;i++){
+                cin >> listofplayers[i];
+            }
+        }
+        void addplayertoTeam(int playerID){
+            cout << "---Adding Player to Team---" << endl;
+            cout << "Enter Player ID to add: " << endl;
+            cin >> playerID;
+            for(int i=0;i<11;i++){
+                if(listofplayers[i]==0){
+                    listofplayers[i]=playerID;
+                    cout << "Player ID " << playerID << " added to the team." << endl;
+                    return;
+                }
+            }
+            cout << "Team is already full. Cannot add more players." << endl;
+        }
+        void DisplayTeam(){
+            cout << "---Team Details---" << endl;
+            cout << "Team ID: " << TeamID << endl;
+            cout << "Team Name: " << teamname << endl;
+            cout << "Country: " << country << endl;
+            cout << "Player IDs: ";
+            for(int i=0;i<11;i++){
+                cout << listofplayers[i] << " ";
+            }
+            cout << endl;
+        }
+        
+};
