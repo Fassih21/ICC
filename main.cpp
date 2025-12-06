@@ -32,19 +32,19 @@ class Player{
         void AddPlayer(int playerID, string name, int age, string role, int matches, int runs, int wickets){
             cout << "---Adding Player Details---" << endl;
             cout << "Enter Player ID: " << endl;
-            cin >> playerID;
+            cin  >> this->playerID;
             cout << "Enter Player's Name: " << endl;
-            cin >> name;
+            cin >> this->name;
             cout << "Enter Player's age: " << endl;
-            cin >> age;
+            cin >> this->age;
             cout << "Enter Player's Role: " << endl;
-            cin >> role;
+            cin >> this->role;
             cout << "Enter Number of Matches Played: " << endl;
-            cin >> matches;
+            cin >> this->matches;
             cout << "Enter Total Runs Scored: " << endl;
-            cin >> runs;
+            cin >> this->runs;
             cout << "Enter Total Wickets Taken: " << endl;
-            cin >> wickets;
+            cin >> this->wickets;
         }
         void DisplayPlayer(){
             cout << "---Player Details---" << endl;
