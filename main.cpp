@@ -117,3 +117,21 @@ class Team{
         }
         
 };
+class CricketBoard{
+    private:
+    int boardID;
+    string boardName;
+    string country;
+    int listofteams;
+    public:
+    
+    CricketBoard(int ID, string n, string c, int lot){
+        boardID=ID;
+        boardName=n;
+        country=c;
+        listofteams=lot;
+    }
+    void AddBoard(int boardID, string boardName, string country, int listofteams){
+        cout << ""
+    }
+};
