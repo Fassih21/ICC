@@ -124,7 +124,7 @@ class CricketBoard{
     string country;
     int listofteams;
     public:
-    
+
     CricketBoard(int ID, string n, string c, int lot){
         boardID=ID;
         boardName=n;
@@ -132,6 +132,6 @@ class CricketBoard{
         listofteams=lot;
     }
     void AddBoard(int boardID, string boardName, string country, int listofteams){
-        cout << ""
+        cout << "";
     }
 };
