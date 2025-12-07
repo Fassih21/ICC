@@ -20,15 +20,7 @@ class Player{
             runs=0;
             wickets=0;
         }
-        Player(int ID, string n, int a, string r, int m, int ru, int w){
-            playerID=ID;
-            name=n;
-            age=a;
-            role=r;
-            matches=m;
-            runs=ru;
-            wickets=w;
-        }
+        
         void AddPlayer(int playerID, string name, int age, string role, int matches, int runs, int wickets){
             cout << "---Adding Player Details---" << endl;
             cout << "Enter Player ID: " << endl;
@@ -78,12 +70,12 @@ class Team{
         string country;
         int listofplayers[11];
         public:
-        Team(int TID, string tname, string ctry, int lop[11]){
-            TeamID=TID;
-            teamname=tname;
-            country=ctry;
+        Team(){
+            TeamID=0;
+            teamname="No name";
+            country="No country";
             for(int i=0;i<11;i++){
-                listofplayers[i]=lop[i];
+                listofplayers[i]=0;
             }
         }
         void AddTeam(int TeamID, string teamname, string country, int listofplayers[11]){
@@ -137,12 +129,6 @@ class CricketBoard{
         country="No country";
         listofteams=0;
         boardID=0;
-    }
-    CricketBoard(int ID, string n, string c, int lot){
-        boardID=ID;
-        boardName=n;
-        country=c;
-        listofteams=lot;
     }
 
     void AddBoard(int boardID, string boardName, string country, int listofteams){
