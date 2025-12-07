@@ -20,6 +20,9 @@ class Player{
             runs=0;
             wickets=0;
         }
+         int getPlayerID() {
+        return playerID;
+        }   
         
         void AddPlayer(int playerID, string name, int age, string role, int matches, int runs, int wickets){
             cout << "---Adding Player Details---" << endl;
@@ -67,60 +70,62 @@ class Player{
 
 };
 
-class Team{
-    private:
-        int TeamID;
-        string teamname;
-        string country;
-        Player listofplayers[11];
-        public:
-        Team(){
-            TeamID=0;
-            teamname="No name";
-            country="No country";
-            for(int i=0;i<11;i++){
-                listofplayers[i]=0;
+class Team {
+private:
+    int TeamID;
+    string teamname;
+    string country;
+    Player listofplayers[11];
+
+public:
+    Team() {
+        TeamID = 0;
+        teamname = "";
+        country = "";
+    }
+
+    void AddTeam() {
+        cout << "---Adding Team Details---\n";
+
+        cout << "Enter Team ID: ";
+        cin >> TeamID;
+
+        cout << "Enter Team Name: ";
+        cin >> teamname;
+
+        cout << "Enter Country: ";
+        cin >> country;
+
+        cout << "\nEnter 11 Players:\n";
+        for (int i = 0; i < 11; i++) {
+            cout << "\nPlayer " << (i+1) << ":\n";
+            listofplayers[i].AddPlayer(0, "", 0, "", 0, 0, 0);
+        }
+    }
+
+    void addplayertoTeam(Player p) {
+        for (int i = 0; i < 11; i++) {
+            if (listofplayers[i].getPlayerID() == 0) {
+                listofplayers[i] = p;
+                return;
             }
         }
-        void AddTeam(){
-            cout << "---Adding Team Details---" << endl;
-            cout << "Enter Team ID: " << endl;
-            cin >> TeamID;
-            cout << "Enter Team Name: " << endl;
-            cin >> teamname;
-            cout << "Enter Country: " << endl;
-            cin >> country;
-            cout << "Enter Player IDs for 11 Players: " << endl;
-            for(int i=0;i<11;i++){
-                cin >> listofplayers[i];
-            }
-        }
-        void addplayertoTeam(int playerID){
-            cout << "---Adding Player to Team---" << endl;
-            cout << "Enter Player ID to add: " << endl;
-            cin >> playerID;
-            for(int i=0;i<11;i++){
-                if(listofplayers[i]==0){
-                    listofplayers[i]=playerID;
-                    cout << "Player ID " << playerID << " added to the team." << endl;
-                    return;
-                }
-            }
-            cout << "Team is already full. Cannot add more players." << endl;
-        }
-        void DisplayTeam(){
-            cout << "---Team Details---" << endl;
-            cout << "Team ID: " << TeamID << endl;
-            cout << "Team Name: " << teamname << endl;
-            cout << "Country: " << country << endl;
-            cout << "Player IDs: ";
-            for(int i=0;i<11;i++){
-                cout << listofplayers[i] << " ";
-            }
+        cout << "Team is full.\n";
+    }
+
+    void DisplayTeam() {
+        cout << "---Team Details---\n";
+        cout << "Team ID: " << TeamID << endl;
+        cout << "Team Name: " << teamname << endl;
+        cout << "Country: " << country << endl;
+
+        for (int i = 0; i < 11; i++) {
+            listofplayers[i].DisplayPlayer();
             cout << endl;
         }
-        
+    }
 };
+
 class CricketBoard{
     private:
     int boardID;
