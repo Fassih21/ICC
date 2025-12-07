@@ -48,19 +48,23 @@ class Player{
             cout << "Total Runs Scored: " << runs << endl;
             cout << "Total Wickets Taken: " << wickets << endl;
         }
-        void UpdateStats(int runs, int wickets){
+       void UpdateStats() {
             cout << "---Updating Player Stats---" << endl;
-            cout << "Enter Additional Runs Scored: " << endl;
+
             int addRuns;
+            cout << "Enter Additional Runs Scored: ";
             cin >> addRuns;
-            runs += addRuns;
-            cout << "Enter Additional Wickets Taken: " << endl;
+            this->runs += addRuns;
+
             int addWickets;
-            cin >> addWickets;
-            wickets += addWickets;
-            cout << "Updated Total Runs Scored: " << runs << endl;
-            cout << "Updated Total Wickets Taken: " << wickets << endl;
-        }
+            cout << "Enter Additional Wickets Taken: ";
+            cin  >> addWickets;
+            this->wickets += addWickets;
+
+            cout << "Updated Total Runs Scored: " << this->runs << endl;
+            cout << "Updated Total Wickets Taken: " << this->wickets << endl;
+}
+
 };
 
 class Team{
@@ -68,7 +72,7 @@ class Team{
         int TeamID;
         string teamname;
         string country;
-        int listofplayers[11];
+        Player listofplayers[11];
         public:
         Team(){
             TeamID=0;
@@ -78,7 +82,7 @@ class Team{
                 listofplayers[i]=0;
             }
         }
-        void AddTeam(int TeamID, string teamname, string country, int listofplayers[11]){
+        void AddTeam(){
             cout << "---Adding Team Details---" << endl;
             cout << "Enter Team ID: " << endl;
             cin >> TeamID;
