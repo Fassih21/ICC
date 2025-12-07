@@ -130,38 +130,52 @@ private:
     int boardID;
     string boardName;
     string country;
-    int listofteams;
+    Team listOfTeams[10];
+    int teamCount;
 
 public:
     CricketBoard() {
         boardID = 0;
         boardName = "No name";
         country = "No country";
-        listofteams = 0;
+        teamCount = 0;
     }
 
     void AddBoard() {
-        cout << "----Adding Cricket Board Details----" << endl;
-        cin.ignore();
-        cout << "Enter Board Name: ";
-        getline(cin, boardName);
-        cout << "Enter Board ID: ";
+        cout << "----Adding Cricket Board----\n";
+        cout << "Enter the Name of the Cricket Board: ";
+        cin >> boardName;
+        cout << "Enter the ID of the Cricket Board: ";
         cin >> boardID;
-        cin.ignore();
-        cout << "Enter Country: ";
-        getline(cin, country);
-        cout << "Enter Number of Teams under this Board: ";
-        cin >> listofteams;
+        cout << "Enter the country of the Cricket Board: ";
+        cin >> country;
+        teamCount = 0;
+    }
+
+    void addTeamToBoard(Team t) {
+        if (teamCount < 10) {
+            listOfTeams[teamCount] = t;
+            teamCount++;
+            cout << "Team added successfully.\n";
+        } else {
+            cout << "Cannot add more teams. Maximum reached.\n";
+        }
     }
 
     void DisplayBoard() {
-        cout << "---Cricket Board Details---" << endl;
+        cout << "----Cricket Board Details----\n";
         cout << "Board Name: " << boardName << endl;
         cout << "Board ID: " << boardID << endl;
-        cout << "Country: " << country << endl;
-        cout << "Number of Teams: " << listofteams << endl;
+        cout << "Board Country: " << country << endl;
+        cout << "Number of Teams: " << teamCount << endl;
+
+        for (int i = 0; i < teamCount; i++) {
+            cout << "\nTeam " << (i + 1) << ":\n";
+            listOfTeams[i].DisplayTeam();
+        }
     }
 };
+
 
 int main() {
     Player p;
