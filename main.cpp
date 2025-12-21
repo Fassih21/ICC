@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 #include <string>
 using namespace std;
 
@@ -183,9 +184,9 @@ class Match{
     string Team1;
     string Team2;
     string venue;
-    int date;
+    string date;
     string result;
-   void PlayMatch() {
+   virtual void PlayMatch() {
     cout << "---Playing Match---" << endl;
 
     cout << "Enter Match ID: ";
@@ -202,7 +203,7 @@ class Match{
     getline(cin, venue);
 
     cout << "Enter Date: ";
-    cin >> date;
+    getline(cin, date);
 
     int score1, score2;
     cout << "Enter score for " << Team1 << ": ";
@@ -226,11 +227,66 @@ void displayMatch() {
     cout << "Venue: " << venue << endl;
     cout << "Date: " << date << endl;
     cout << "Result: " << result << endl;
-}
-
+    }
 };
 
+class T20Match : public Match {
+    private:
+    int overs;
+    public:
+    T20Match(){
+        overs = 20;
+    }
+    int CalculateScore(int runs, int wickets){
+        cout << "Calculating score for T20 Match with " << overs << " overs." << endl;
+        int total = runs;
+        for (int i = 0; i < overs; i++)
+            total += rand() % 37;
+        total -= wickets * 5;
+        if (total < 0) total = 0;
+        return total;
+    }
+       void PlayMatch() override {
+        cout << "---Playing T20 Match---" << endl;
 
+        cout << "Enter Match ID: ";
+        cin >> matchID;
+        cin.ignore();
+
+        cout << "Enter Team 1 Name: ";
+        getline(cin, Team1);
+
+        cout << "Enter Team 2 Name: ";
+        getline(cin, Team2);
+
+        cout << "Enter Venue: ";
+        getline(cin, venue);
+
+        cout << "Enter Date: ";
+        getline(cin, date);
+
+        int score1, wickets1, score2, wickets2;
+        cout << "Enter runs for " << Team1 << ": ";
+        cin >> score1;
+        cout << "Enter wickets lost: ";
+        cin >> wickets1;
+
+        cout << "Enter runs for " << Team2 << ": ";
+        cin >> score2;
+        cout << "Enter wickets lost: ";
+        cin >> wickets2;
+
+        score1 = CalculateScore(score1, wickets1);
+        score2 = CalculateScore(score2, wickets2);
+
+        if (score1 > score2)
+            result = Team1 + " won the T20 match";
+        else if (score2 > score1)
+            result = Team2 + " won the T20 match";
+        else
+            result = "T20 Match Draw";
+    }
+};
 int main() {
     Player p;
     p.AddPlayer();
