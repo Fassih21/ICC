@@ -144,11 +144,13 @@ public:
     void AddBoard() {
         cout << "----Adding Cricket Board----\n";
         cout << "Enter the Name of the Cricket Board: ";
-        cin >> boardName;
+        cin.ignore();
+        getline(cin, boardName);
         cout << "Enter the ID of the Cricket Board: ";
         cin >> boardID;
+        cin.ignore();
         cout << "Enter the country of the Cricket Board: ";
-        cin >> country;
+        getline(cin, country);
         teamCount = 0;
     }
 
@@ -174,6 +176,58 @@ public:
             listOfTeams[i].DisplayTeam();
         }
     }
+};
+class Match{
+    public:
+    int matchID;
+    string Team1;
+    string Team2;
+    string venue;
+    int date;
+    string result;
+   void PlayMatch() {
+    cout << "---Playing Match---" << endl;
+
+    cout << "Enter Match ID: ";
+    cin >> matchID;
+    cin.ignore();
+
+    cout << "Enter Team 1 Name: ";
+    getline(cin, Team1);
+
+    cout << "Enter Team 2 Name: ";
+    getline(cin, Team2);
+
+    cout << "Enter Venue: ";
+    getline(cin, venue);
+
+    cout << "Enter Date: ";
+    cin >> date;
+
+    int score1, score2;
+    cout << "Enter score for " << Team1 << ": ";
+    cin >> score1;
+    cout << "Enter score for " << Team2 << ": ";
+    cin >> score2;
+
+    if (score1 > score2)
+        result = Team1 + " won the match";
+    else if (score2 > score1)
+        result = Team2 + " won the match";
+    else
+        result = "The match is a draw";
+}
+
+void displayMatch() {
+    cout << "\n---Match Details---" << endl;
+    cout << "Match ID: " << matchID << endl;
+    cout << "Team 1: " << Team1 << endl;
+    cout << "Team 2: " << Team2 << endl;
+    cout << "Venue: " << venue << endl;
+    cout << "Date: " << date << endl;
+    cout << "Result: " << result << endl;
+}
+
 };
 
 

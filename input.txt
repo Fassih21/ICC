@@ -1,0 +1,84 @@
+101
+Virat Kohli
+32
+Batsman
+120
+13000
+0
+102
+300
+India
+IND
+102
+Sachin Tendulkar
+51
+Batsman
+200
+15921
+2
+103
+Jasprit Bumrah
+30
+Bowler
+98
+500
+89
+104
+Rohit Sharma
+37
+Batsman
+150
+9000
+5
+105
+KL Rahul
+29
+Batsman
+95
+5000
+1
+106
+Hardik Pandya
+30
+All-rounder
+80
+3000
+25
+107
+Yuzvendra Chahal
+33
+Bowler
+75
+200
+150
+108
+Bumrah Backup
+28
+Bowler
+50
+100
+45
+109
+Siraj Mohammed
+29
+Bowler
+60
+150
+70
+110
+Naveen ul Haq
+27
+Bowler
+55
+80
+55
+111
+Deepak Hooda
+27
+All-rounder
+45
+2000
+20
+001
+India Cricket Board
+India
