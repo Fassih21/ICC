@@ -310,8 +310,75 @@ class Tournament {
             matchesList[i].displayMatch();
         }
     }
-
 };
+class RankingSystem {
+private:
+    string teamNames[10];
+    int teamPoints[10];
+    int teamCount;
+
+    string playerNames[50];
+    int playerPoints[50];
+    int playerCount;
+
+public:
+    RankingSystem() {
+        teamCount = 0;
+        playerCount = 0;
+    }
+
+    void updateRankings(string winningTeam, string playerName) {
+        bool teamFound = false;
+        for (int i = 0; i < teamCount; i++) {
+            if (teamNames[i] == winningTeam) {
+                teamPoints[i] += 2;
+                teamFound = true;
+                break;
+            }
+        }
+
+        if (!teamFound && teamCount < 10) {
+            teamNames[teamCount] = winningTeam;
+            teamPoints[teamCount] = 2;
+            teamCount++;
+        }
+
+        bool playerFound = false;
+        for (int i = 0; i < playerCount; i++) {
+            if (playerNames[i] == playerName) {
+                playerPoints[i] += 10;
+                playerFound = true;
+                break;
+            }
+        }
+
+        if (!playerFound && playerCount < 50) {
+            playerNames[playerCount] = playerName;
+            playerPoints[playerCount] = 10;
+            playerCount++;
+        }
+    }
+
+    void displayRankings() {
+        cout << "\n--- Team Rankings ---\n";
+        for (int i = 0; i < teamCount; i++) {
+            cout << teamNames[i] << " : " << teamPoints[i] << " points\n";
+        }
+
+        cout << "\n--- Player Rankings ---\n";
+        for (int i = 0; i < playerCount; i++) {
+            cout << playerNames[i] << " : " << playerPoints[i] << " points\n";
+        }
+    }
+
+    bool operator>(RankingSystem &other) {
+        if (teamCount == 0 || other.teamCount == 0)
+            return false;
+
+        return teamPoints[0] > other.teamPoints[0];
+    }
+};
+
 int main() {
     Player p;
     p.AddPlayer();
