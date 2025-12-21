@@ -287,6 +287,31 @@ class T20Match : public Match {
             result = "T20 Match Draw";
     }
 };
+class Tournament {
+    private:
+    int tournamentID;
+    string tournamentName;
+    Match matchesList[120];
+    string winner;
+    public:
+    void AddMatch(){
+        cout << "---Adding Match to Tournament---" << endl;
+        int matchCount;
+        cout << "Enter number of matches to add: ";
+        cin >> matchCount;
+        for (int i = 0; i < matchCount; i++) {
+            cout << "\nMatch " << (i + 1) << ":\n";
+            matchesList[i].PlayMatch();
+        }
+    }
+    void displayResults() {
+        cout << "---Tournament Results---" << endl;
+        for (int i = 0; i < 120; i++) {
+            matchesList[i].displayMatch();
+        }
+    }
+
+};
 int main() {
     Player p;
     p.AddPlayer();
