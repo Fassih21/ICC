@@ -5,7 +5,12 @@
 #include <fstream>
 using namespace std;
 
-class Player {
+class Person {
+public:
+    virtual void displayInfo() = 0;
+};
+
+class Player : public Person {
 private:
     int playerID;
     string name;
@@ -17,62 +22,102 @@ private:
 
 public:
     Player() {
-        playerID = 0;
-        name = "";
-        age = 0;
-        role = "";
-        matches = 0;
-        runs = 0;
-        wickets = 0;
+        playerID = 0; name = ""; age = 0; role = "";
+        matches = 0; runs = 0; wickets = 0;
     }
 
-    int getPlayerID() {
-        return playerID;
-    }
+    int getPlayerID() { return playerID; }
 
     void AddPlayer() {
-        cout << "---Adding Player Details---" << endl;
-        cout << "Enter Player ID: ";
-        cin >> playerID;
-        cin.ignore();
-        cout << "Enter Player's Name: ";
-        getline(cin, name);
-        cout << "Enter Player's Age: ";
-        cin >> age;
-        cin.ignore();
-        cout << "Enter Player's Role: ";
-        getline(cin, role);
-        cout << "Enter Number of Matches Played: ";
-        cin >> matches;
-        cout << "Enter Total Runs Scored: ";
-        cin >> runs;
-        cout << "Enter Total Wickets Taken: ";
-        cin >> wickets;
-    }
-
-    void DisplayPlayer() {
-        cout << "---Player Details---" << endl;
-        cout << "Player ID: " << playerID << endl;
-        cout << "Player's Name: " << name << endl;
-        cout << "Player's Age: " << age << endl;
-        cout << "Player's Role: " << role << endl;
-        cout << "Number of Matches Played: " << matches << endl;
-        cout << "Total Runs Scored: " << runs << endl;
-        cout << "Total Wickets Taken: " << wickets << endl;
+        cout << "---Adding Player Details---\n";
+        cout << "Enter Player ID: "; cin >> playerID; cin.ignore();
+        cout << "Enter Player Name: "; getline(cin, name);
+        cout << "Enter Age: "; cin >> age; cin.ignore();
+        cout << "Enter Role: "; getline(cin, role);
+        cout << "Matches Played: "; cin >> matches;
+        cout << "Total Runs: "; cin >> runs;
+        cout << "Total Wickets: "; cin >> wickets;
     }
 
     void UpdateStats() {
-        cout << "---Updating Player Stats---" << endl;
-        int addRuns;
-        cout << "Enter Additional Runs Scored: ";
-        cin >> addRuns;
-        runs += addRuns;
-        int addWickets;
-        cout << "Enter Additional Wickets Taken: ";
-        cin >> addWickets;
-        wickets += addWickets;
-        cout << "Updated Total Runs Scored: " << runs << endl;
-        cout << "Updated Total Wickets Taken: " << wickets << endl;
+        int addRuns, addWickets;
+        cout << "Additional Runs: "; cin >> addRuns;
+        cout << "Additional Wickets: "; cin >> addWickets;
+        runs += addRuns; wickets += addWickets;
+    }
+
+    void displayInfo() override {
+        cout << "---Player Info---\n";
+        cout << "ID: " << playerID << "\nName: " << name
+             << "\nAge: " << age << "\nRole: " << role
+             << "\nMatches: " << matches
+             << "\nRuns: " << runs
+             << "\nWickets: " << wickets << endl;
+    }
+    void DisplayPlayer() {
+        displayInfo();
+    }
+};
+
+class Coach : public Person {
+private:
+    string name;
+    int age;
+    int experience;
+public:
+    Coach() { name = ""; age = 0; experience = 0; }
+
+    void AddCoach() {
+        cout << "---Adding Coach Details---\n";
+        cout << "Name: "; cin.ignore(); getline(cin, name);
+        cout << "Age: "; cin >> age;
+        cout << "Experience (years): "; cin >> experience;
+    }
+
+    void displayInfo() override {
+        cout << "---Coach Info---\n";
+        cout << "Name: " << name << "\nAge: " << age
+             << "\nExperience: " << experience << " years\n";
+    }
+};
+
+class Umpire : public Person {
+private:
+    string name;
+    int age;
+    int totalMatches;
+public:
+    Umpire() { name = ""; age = 0; totalMatches = 0; }
+
+    void AddUmpire() {
+        cout << "---Adding Umpire Details---\n";
+        cout << "Name: "; cin.ignore(); getline(cin, name);
+        cout << "Age: "; cin >> age;
+        cout << "Total Matches Officiated: "; cin >> totalMatches;
+    }
+
+    void displayInfo() override {
+        cout << "---Umpire Info---\n";
+        cout << "Name: " << name << "\nAge: " << age
+             << "\nMatches Officiated: " << totalMatches << endl;
+    }
+};
+
+template <class T>
+class List {
+private:
+    T items[100];
+    int count;
+public:
+    List() { count = 0; }
+    void addItem(T item) {
+        if(count < 100) items[count++] = item;
+    }
+    void displayAll() {
+        for(int i = 0; i < count; i++) {
+            items[i].displayInfo();
+            cout << endl;
+        }
     }
 };
 
@@ -475,27 +520,45 @@ public:
 };
 
 int main() {
+    // --- Testing Human Entities ---
     Player p;
     p.AddPlayer();
-    p.DisplayPlayer();
+    p.displayInfo();
     p.UpdateStats();
+    p.displayInfo();
 
+    Coach c;
+    c.AddCoach();
+    c.displayInfo();
+
+    Umpire u;
+    u.AddUmpire();
+    u.displayInfo();
+
+    List<Person*> humans;  // Use pointers for polymorphism
+    humans.addItem(&p);
+    humans.addItem(&c);
+    humans.addItem(&u);
+
+    cout << "\n---All Humans in List---\n";
+    humans.displayAll();
+
+    // --- Team & Board ---
     Team t;
     t.AddTeam();
     t.DisplayTeam();
 
     CricketBoard cb;
     cb.AddBoard();
+    cb.addTeamToBoard(t);
     cb.DisplayBoard();
 
+    // --- T20 Match ---
     T20Match t20;
     t20.PlayMatch();
     t20.displayMatch();
 
-    Tournament tour;
-    tour.AddMatch();
-    tour.displayResults();
-
+    // --- ICC ---
     ICC icc;
     icc.registerBoard(cb);
     icc.organizeTournament();
