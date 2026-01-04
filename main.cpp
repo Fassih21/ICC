@@ -180,77 +180,113 @@ public:
         }
     }
 };
-class Match{
-    public:
+
+class Venue {
+private:
+    string venueName;
+    string country;
+    int capacity;
+    string pitchCondition;
+
+public:
+    Venue() {
+        venueName = "";
+        country = "";
+        capacity = 0;
+        pitchCondition = "";
+    }
+
+    void addVenue() {
+        cout << "\n---Enter Venue Details---\n";
+        cout << "Venue Name: ";
+        cin >> ws;
+        getline(cin, venueName);
+        cout << "Country: ";
+        getline(cin, country);
+        cout << "Capacity: ";
+        cin >> capacity;
+        cout << "Pitch Condition: ";
+        cin >> ws;
+        getline(cin, pitchCondition);
+    }
+
+    void displayVenueInfo() {
+        cout << "\nVenue Name: " << venueName << endl;
+        cout << "Country: " << country << endl;
+        cout << "Capacity: " << capacity << endl;
+        cout << "Pitch Condition: " << pitchCondition << endl;
+    }
+
+    void saveToCSV() {
+        ofstream file("Venue_Data.csv", ios::app);
+        file << venueName << "," << country << "," << capacity << "," << pitchCondition << endl;
+        file.close();
+    }
+};
+
+class Match {
+public:
     int matchID;
     string Team1;
     string Team2;
-    string venue;
     string date;
     string result;
+    Venue venue;
 
     Match() {
         matchID = 0;
         Team1 = "";
         Team2 = "";
-        venue = "";
         date = "";
         result = "";
     }
 
     virtual void PlayMatch() {
-    cout << "---Playing Match---" << endl;
+        cout << "---Playing Match---\n";
+        cout << "Enter Match ID: ";
+        cin >> matchID;
+        cout << "Enter Team 1 Name: ";
+        cin >> ws;
+        getline(cin, Team1);
+        cout << "Enter Team 2 Name: ";
+        getline(cin, Team2);
+        venue.addVenue();
+        cout << "Enter Date: ";
+        getline(cin, date);
+        int score1, score2;
+        cout << "Enter score for " << Team1 << ": ";
+        cin >> score1;
+        cout << "Enter score for " << Team2 << ": ";
+        cin >> score2;
+        if (score1 > score2)
+            result = Team1 + " won the match";
+        else if (score2 > score1)
+            result = Team2 + " won the match";
+        else
+            result = "Match Draw";
+        venue.saveToCSV();
+    }
 
-    cout << "Enter Match ID: ";
-    cin >> matchID;
-    cin.ignore();
-
-    cout << "Enter Team 1 Name: ";
-    getline(cin, Team1);
-
-    cout << "Enter Team 2 Name: ";
-    getline(cin, Team2);
-
-    cout << "Enter Venue: ";
-    getline(cin, venue);
-
-    cout << "Enter Date: ";
-    getline(cin, date);
-
-    int score1, score2;
-    cout << "Enter score for " << Team1 << ": ";
-    cin >> score1;
-    cout << "Enter score for " << Team2 << ": ";
-    cin >> score2;
-
-    if (score1 > score2)
-        result = Team1 + " won the match";
-    else if (score2 > score1)
-        result = Team2 + " won the match";
-    else
-        result = "The match is a draw";
-}
-
-void displayMatch() {
-    cout << "\n---Match Details---" << endl;
-    cout << "Match ID: " << matchID << endl;
-    cout << "Team 1: " << Team1 << endl;
-    cout << "Team 2: " << Team2 << endl;
-    cout << "Venue: " << venue << endl;
-    cout << "Date: " << date << endl;
-    cout << "Result: " << result << endl;
+    void displayMatch() {
+        cout << "\n---Match Details---\n";
+        cout << "Match ID: " << matchID << endl;
+        cout << "Team 1: " << Team1 << endl;
+        cout << "Team 2: " << Team2 << endl;
+        cout << "Date: " << date << endl;
+        cout << "Result: " << result << endl;
+        venue.displayVenueInfo();
     }
 };
 
 class T20Match : public Match {
-    private:
+private:
     int overs;
-    public:
-    T20Match(){
+public:
+    T20Match() {
         overs = 20;
     }
-    int CalculateScore(int runs, int wickets){
-        cout << "Calculating score for T20 Match with " << overs << " overs." << endl;
+
+    int CalculateScore(int runs, int wickets) {
         int total = runs;
         for (int i = 0; i < overs; i++)
             total += rand() % 37;
@@ -258,56 +294,48 @@ class T20Match : public Match {
         if (total < 0) total = 0;
         return total;
     }
-       void PlayMatch() override {
-        cout << "---Playing T20 Match---" << endl;
 
+    void PlayMatch() override {
+        cout << "---Playing T20 Match---" << endl;
         cout << "Enter Match ID: ";
         cin >> matchID;
         cin.ignore();
-
         cout << "Enter Team 1 Name: ";
         getline(cin, Team1);
-
         cout << "Enter Team 2 Name: ";
         getline(cin, Team2);
-
-        cout << "Enter Venue: ";
-        getline(cin, venue);
-
+        venue.addVenue();
         cout << "Enter Date: ";
         getline(cin, date);
-
         int score1, wickets1, score2, wickets2;
         cout << "Enter runs for " << Team1 << ": ";
         cin >> score1;
         cout << "Enter wickets lost: ";
         cin >> wickets1;
-
         cout << "Enter runs for " << Team2 << ": ";
         cin >> score2;
         cout << "Enter wickets lost: ";
         cin >> wickets2;
-
         score1 = CalculateScore(score1, wickets1);
         score2 = CalculateScore(score2, wickets2);
-
         if (score1 > score2)
             result = Team1 + " won the T20 match";
         else if (score2 > score1)
             result = Team2 + " won the T20 match";
         else
             result = "T20 Match Draw";
+        venue.saveToCSV();
     }
 };
+
 class Tournament {
-    private:
+private:
     int tournamentID;
     string tournamentName;
     Match matchesList[120];
     string winner;
-    public:
-    void AddMatch(){
-        cout << "---Adding Match to Tournament---" << endl;
+public:
+    void AddMatch() {
         int matchCount;
         cout << "Enter number of matches to add: ";
         cin >> matchCount;
@@ -317,28 +345,25 @@ class Tournament {
         }
     }
     void displayResults() {
-        cout << "---Tournament Results---" << endl;
         for (int i = 0; i < 120; i++) {
             matchesList[i].displayMatch();
         }
     }
 };
+
 class RankingSystem {
 private:
     string teamNames[10];
     int teamPoints[10];
     int teamCount;
-
     string playerNames[50];
     int playerPoints[50];
     int playerCount;
-
 public:
     RankingSystem() {
         teamCount = 0;
         playerCount = 0;
     }
-
     void updateRankings(string winningTeam, string playerName) {
         bool teamFound = false;
         for (int i = 0; i < teamCount; i++) {
@@ -348,13 +373,11 @@ public:
                 break;
             }
         }
-
         if (!teamFound && teamCount < 10) {
             teamNames[teamCount] = winningTeam;
             teamPoints[teamCount] = 2;
             teamCount++;
         }
-
         bool playerFound = false;
         for (int i = 0; i < playerCount; i++) {
             if (playerNames[i] == playerName) {
@@ -363,170 +386,90 @@ public:
                 break;
             }
         }
-
         if (!playerFound && playerCount < 50) {
             playerNames[playerCount] = playerName;
             playerPoints[playerCount] = 10;
             playerCount++;
         }
     }
-
     void displayRankings() {
-        cout << "\n--- Team Rankings ---\n";
         for (int i = 0; i < teamCount; i++) {
             cout << teamNames[i] << " : " << teamPoints[i] << " points\n";
         }
-
-        cout << "\n--- Player Rankings ---\n";
         for (int i = 0; i < playerCount; i++) {
             cout << playerNames[i] << " : " << playerPoints[i] << " points\n";
         }
     }
-
     bool operator>(RankingSystem &other) {
-        if (teamCount == 0 || other.teamCount == 0)
-            return false;
-
+        if (teamCount == 0 || other.teamCount == 0) return false;
         return teamPoints[0] > other.teamPoints[0];
-    }
-};
-class Statistics {
-public:
-    void generateTopScorers() {
-        ifstream file("players.csv");
-        int id, runs, wickets;
-        string name;
-        int maxRuns = -1;
-        string topScorer;
-
-        while (file >> id >> name >> runs >> wickets) {
-            if (runs > maxRuns) {
-                maxRuns = runs;
-                topScorer = name;
-            }
-        }
-        file.close();
-
-        cout << "Top Scorer: " << topScorer << " (" << maxRuns << " runs)\n";
-    }
-
-    void bestBowler() {
-        ifstream file("players.csv");
-        int id, runs, wickets;
-        string name;
-        int maxWickets = -1;
-        string best;
-
-        while (file >> id >> name >> runs >> wickets) {
-            if (wickets > maxWickets) {
-                maxWickets = wickets;
-                best = name;
-            }
-        }
-        file.close();
-
-        cout << "Best Bowler: " << best << " (" << maxWickets << " wickets)\n";
-    }
-
-    void teamWinRatio() {
-        ifstream file("teams.csv");
-        string teamName;
-        int wins, matches;
-
-        cout << "\n--- Team Win Ratios ---\n";
-        while (file >> teamName >> wins >> matches) {
-            float ratio = (matches == 0) ? 0 : (float)wins / matches;
-            cout << teamName << " : " << ratio << endl;
-        }
-        file.close();
     }
 };
 
 class ICC {
 private:
-    list<CricketBoard> boards;   
-
-    string tournaments[20];      
+    list<CricketBoard> boards;
+    string tournaments[20];
     int tournamentCount;
-
-    string globalRankings[50];   
+    string globalRankings[50];
     int rankingCount;
-
 public:
     ICC() {
         tournamentCount = 0;
         rankingCount = 0;
     }
-
     void registerBoard(CricketBoard cb) {
         boards.push_back(cb);
         cout << "Cricket Board registered in ICC.\n";
     }
-
     void organizeTournament() {
         if (tournamentCount >= 20) {
             cout << "No space for more tournaments.\n";
             return;
         }
-
         cout << "Enter Tournament Name: ";
         cin.ignore();
         getline(cin, tournaments[tournamentCount]);
         tournamentCount++;
-
         cout << "Tournament organized under ICC.\n";
     }
-
     void addGlobalRanking() {
         if (rankingCount >= 50) {
             cout << "Ranking list full.\n";
             return;
         }
-
         cout << "Enter Team/Player Name for Ranking: ";
         cin.ignore();
         getline(cin, globalRankings[rankingCount]);
         rankingCount++;
     }
-
     void displayGlobalRankings() {
-        cout << "\n--- ICC Global Rankings ---\n";
         for (int i = 0; i < rankingCount; i++) {
             cout << i + 1 << ". " << globalRankings[i] << endl;
         }
     }
-
     void saveToCSV() {
         ofstream file("ICC_Data.csv");
-
         file << "Cricket Boards\n";
         for (auto cb : boards) {
             file << "Board Saved\n";
         }
-
         file << "\nTournaments\n";
         for (int i = 0; i < tournamentCount; i++) {
             file << tournaments[i] << endl;
         }
-
         file << "\nGlobal Rankings\n";
         for (int i = 0; i < rankingCount; i++) {
             file << globalRankings[i] << endl;
         }
-
         file.close();
-        cout << "ICC data saved to file.\n";
     }
-
     void loadFromCSV() {
         ifstream file("ICC_Data.csv");
         string line;
-
-        cout << "\n--- Loading ICC Data ---\n";
         while (getline(file, line)) {
             cout << line << endl;
         }
-
         file.close();
     }
 };
@@ -547,7 +490,6 @@ int main() {
 
     T20Match t20;
     t20.PlayMatch();
-
     t20.displayMatch();
 
     Tournament tour;
@@ -562,4 +504,3 @@ int main() {
 
     return 0;
 }
-
