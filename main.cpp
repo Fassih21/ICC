@@ -393,5 +393,13 @@ int main() {
     cb.AddBoard();
     cb.DisplayBoard();
 
+    T20Match t20;
+    t20.PlayMatch();
+
+    t20.displayMatch();
+
+    Tournament tour;
+    tour.AddMatch();
+    tour.displayResults();
     return 0;
 }
