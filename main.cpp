@@ -1,6 +1,8 @@
 #include <iostream>
 #include <ctime>
 #include <string>
+#include <list> 
+#include <fstream>
 using namespace std;
 
 class Player {
@@ -186,7 +188,17 @@ class Match{
     string venue;
     string date;
     string result;
-   virtual void PlayMatch() {
+
+    Match() {
+        matchID = 0;
+        Team1 = "";
+        Team2 = "";
+        venue = "";
+        date = "";
+        result = "";
+    }
+
+    virtual void PlayMatch() {
     cout << "---Playing Match---" << endl;
 
     cout << "Enter Match ID: ";
@@ -376,6 +388,94 @@ public:
             return false;
 
         return teamPoints[0] > other.teamPoints[0];
+    }
+};
+class ICC {
+private:
+    list<CricketBoard> boards;   
+
+    string tournaments[20];      
+    int tournamentCount;
+
+    string globalRankings[50];   
+    int rankingCount;
+
+public:
+    ICC() {
+        tournamentCount = 0;
+        rankingCount = 0;
+    }
+
+    void registerBoard(CricketBoard cb) {
+        boards.push_back(cb);
+        cout << "Cricket Board registered in ICC.\n";
+    }
+
+    void organizeTournament() {
+        if (tournamentCount >= 20) {
+            cout << "No space for more tournaments.\n";
+            return;
+        }
+
+        cout << "Enter Tournament Name: ";
+        cin.ignore();
+        getline(cin, tournaments[tournamentCount]);
+        tournamentCount++;
+
+        cout << "Tournament organized under ICC.\n";
+    }
+
+    void addGlobalRanking() {
+        if (rankingCount >= 50) {
+            cout << "Ranking list full.\n";
+            return;
+        }
+
+        cout << "Enter Team/Player Name for Ranking: ";
+        cin.ignore();
+        getline(cin, globalRankings[rankingCount]);
+        rankingCount++;
+    }
+
+    void displayGlobalRankings() {
+        cout << "\n--- ICC Global Rankings ---\n";
+        for (int i = 0; i < rankingCount; i++) {
+            cout << i + 1 << ". " << globalRankings[i] << endl;
+        }
+    }
+
+    void saveToCSV() {
+        ofstream file("ICC_Data.csv");
+
+        file << "Cricket Boards\n";
+        for (auto cb : boards) {
+            file << "Board Saved\n";
+        }
+
+        file << "\nTournaments\n";
+        for (int i = 0; i < tournamentCount; i++) {
+            file << tournaments[i] << endl;
+        }
+
+        file << "\nGlobal Rankings\n";
+        for (int i = 0; i < rankingCount; i++) {
+            file << globalRankings[i] << endl;
+        }
+
+        file.close();
+        cout << "ICC data saved to file.\n";
+    }
+
+    void loadFromCSV() {
+        ifstream file("ICC_Data.csv");
+        string line;
+
+        cout << "\n--- Loading ICC Data ---\n";
+        while (getline(file, line)) {
+            cout << line << endl;
+        }
+
+        file.close();
     }
 };
 
