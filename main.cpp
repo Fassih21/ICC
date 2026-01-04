@@ -390,6 +390,58 @@ public:
         return teamPoints[0] > other.teamPoints[0];
     }
 };
+class Statistics {
+public:
+    void generateTopScorers() {
+        ifstream file("players.csv");
+        int id, runs, wickets;
+        string name;
+        int maxRuns = -1;
+        string topScorer;
+
+        while (file >> id >> name >> runs >> wickets) {
+            if (runs > maxRuns) {
+                maxRuns = runs;
+                topScorer = name;
+            }
+        }
+        file.close();
+
+        cout << "Top Scorer: " << topScorer << " (" << maxRuns << " runs)\n";
+    }
+
+    void bestBowler() {
+        ifstream file("players.csv");
+        int id, runs, wickets;
+        string name;
+        int maxWickets = -1;
+        string best;
+
+        while (file >> id >> name >> runs >> wickets) {
+            if (wickets > maxWickets) {
+                maxWickets = wickets;
+                best = name;
+            }
+        }
+        file.close();
+
+        cout << "Best Bowler: " << best << " (" << maxWickets << " wickets)\n";
+    }
+
+    void teamWinRatio() {
+        ifstream file("teams.csv");
+        string teamName;
+        int wins, matches;
+
+        cout << "\n--- Team Win Ratios ---\n";
+        while (file >> teamName >> wins >> matches) {
+            float ratio = (matches == 0) ? 0 : (float)wins / matches;
+            cout << teamName << " : " << ratio << endl;
+        }
+        file.close();
+    }
+};
+
 class ICC {
 private:
     list<CricketBoard> boards;   
@@ -501,5 +553,13 @@ int main() {
     Tournament tour;
     tour.AddMatch();
     tour.displayResults();
+
+    ICC icc;
+    icc.registerBoard(cb);
+    icc.organizeTournament();
+    icc.addGlobalRanking();
+    icc.saveToCSV();
+
     return 0;
 }
+
