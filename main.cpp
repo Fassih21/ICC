@@ -77,60 +77,37 @@ public:
     void DisplayPlayer() {
         displayInfo();
     }
-
     void saveToCSV() {
     ofstream file("players.csv", ios::app);
-
-    if (!file) {
-        cout << "Error opening file!\n";
-        return;
-    }
-
-    file << playerID << ","
-         << name << ","
-         << age << ","
-         << role << ","
-         << matches << ","
-         << runs << ","
-         << wickets << endl;
-
+    if (!file) return;
+    file << playerID << "," << name << "," << age << "," << role << "," 
+         << matches << "," << runs << "," << wickets << endl;
     file.close();
 }
-void loadFromCSV() {
-    static ifstream file("players.csv");
 
-    if (!file) {
-        cout << "File not found!\n";
-        return;
-    }
+    void loadFromCSV(int id) {
+    ifstream file("players.csv");
+    if (!file) return;
 
     string line;
-    if (!getline(file, line)) {
-        return;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string temp;
+        int pid;
+        getline(ss, temp, ','); pid = stoi(temp);
+        if (pid != id) continue;
+        playerID = pid;
+        getline(ss, name, ',');
+        getline(ss, temp, ','); age = stoi(temp);
+        getline(ss, role, ',');
+        getline(ss, temp, ','); matches = stoi(temp);
+        getline(ss, temp, ','); runs = stoi(temp);
+        getline(ss, temp); wickets = stoi(temp);
+        break;
     }
+    file.close();
+}
 
-    string temp;
-    stringstream ss(line);
-
-    getline(ss, temp, ',');
-    playerID = stoi(temp);
-
-    getline(ss, name, ',');
-
-    getline(ss, temp, ',');
-    age = stoi(temp);
-
-    getline(ss, role, ',');
-
-    getline(ss, temp, ',');
-    matches = stoi(temp);
-
-    getline(ss, temp, ',');
-    runs = stoi(temp);
-
-    getline(ss, temp);
-    wickets = stoi(temp);
-    }
 
 };
 
@@ -184,24 +161,35 @@ public:
 template <class T>
 class List {
 private:
-    T items[100];
+    T* items[100];
     int count;
+
 public:
-    List() { count = 0; }
-    void addItem(T item) {
-        if(count < 100) items[count++] = item;
+    List() {
+        count = 0;
     }
+
+    void addItem(T* item) {
+        if (count < 100)
+            items[count++] = item;
+    }
+
     void displayAll() {
-        for(int i = 0; i < count; i++) {
-            if constexpr (std::is_pointer<T>::value) {
-                items[i]->displayInfo();
-            } else {
-                items[i].displayInfo();
-            }
+        for (int i = 0; i < count; i++) {
+            items[i]->displayInfo();
             cout << endl;
         }
     }
+
+    T* findItemByID(int id) {
+        for (int i = 0; i < count; i++) {
+            if (items[i]->getID() == id)
+                return items[i];
+        }
+        return nullptr;
+    }
 };
+
 
 class Team {
 private:
@@ -268,7 +256,7 @@ public:
 
     file.close();
 
-    // save players of this team
+   
     for (int i = 0; i < 11; i++) {
         if (listofplayers[i].getPlayerID() != 0) {
             listofplayers[i].saveToCSV();
@@ -277,7 +265,7 @@ public:
 }
 
     void loadFromCSV() {
-        // stub: not implemented (simple student fix)
+        
     }
 
 };
@@ -335,55 +323,33 @@ public:
     }
     void saveToCSV() {
     ofstream file("boards.csv", ios::app);
+    if (!file) return;
 
-    if (!file) {
-        cout << "Error opening board file!\n";
-        return;
-    }
-
-    file << boardID << ","
-         << boardName << ","
-         << country << ","
-         << teamCount << endl;
-
+    file << boardID << "," << boardName << "," << country << "," << teamCount << endl;
     file.close();
 
-    // save all teams under this board
-    for (int i = 0; i < teamCount; i++) {
+    for (int i = 0; i < teamCount; i++)
         listOfTeams[i].saveToCSV();
-    }
 }
 
-void loadFromCSV() {
+void loadFromCSV(int id) {
     ifstream file("boards.csv");
-
-    if (!file) {
-        cout << "Board file not found!\n";
-        return;
-    }
+    if (!file) return;
 
     string line;
-    if (!getline(file, line)) {
-        file.close();
-        return;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string temp;
+        int bid;
+        getline(ss, temp, ','); bid = stoi(temp);
+        if (bid != id) continue;
+
+        boardID = bid;
+        getline(ss, boardName, ',');
+        getline(ss, country, ',');
+        getline(ss, temp); teamCount = stoi(temp);
+        break;
     }
-
-    string temp;
-    stringstream ss(line);
-
-    getline(ss, temp, ',');
-    boardID = stoi(temp);
-
-    getline(ss, boardName, ',');
-    getline(ss, country, ',');
-
-    getline(ss, temp);
-    teamCount = stoi(temp);
-
-    for (int i = 0; i < teamCount; i++) {
-        listOfTeams[i].loadFromCSV();
-    }
-
     file.close();
 }
 
@@ -426,14 +392,32 @@ public:
     }
 
     void saveToCSV() {
-        ofstream file("Venue_Data.csv", ios::app);
-        if (!file) {
-            cout << "Error opening Venue_Data.csv for writing\n";
-            return;
-        }
-        file << venueName << "," << country << "," << capacity << "," << pitchCondition << endl;
-        file.close();
+    ofstream file("Venue_Data.csv", ios::app);
+    if (!file) return;
+    file << venueName << "," << country << "," << capacity << "," << pitchCondition << endl;
+    file.close();
+}
+
+void loadFromCSV(string vname) {
+    ifstream file("Venue_Data.csv");
+    if (!file) return;
+
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string temp;
+        getline(ss, temp, ',');
+        if (temp != vname) continue;
+
+        venueName = temp;
+        getline(ss, country, ',');
+        getline(ss, temp, ','); capacity = stoi(temp);
+        getline(ss, pitchCondition);
+        break;
     }
+    file.close();
+}
+
 };
 
 class Match {
@@ -627,46 +611,37 @@ public:
     }
 
     void saveToCSV() {
-        ofstream file("tournament.csv");
+    ofstream file("tournament.csv", ios::app);
+    if (!file) return;
 
-        if (!file) {
-            cout << "Error opening file!\n";
-            return;
-        }
+    file << tournamentID << "," << tournamentName << "," << matchCount << "," << winner << endl;
+    file.close();
 
-        file << tournamentID << ","
-             << tournamentName << ","
-             << matchCount << ","
-             << winner << endl;
+    for (int i = 0; i < matchCount; i++)
+        matchesList[i].saveToCSV();
+}
 
-        file.close();
+void loadFromCSV(int id) {
+    ifstream file("tournament.csv");
+    if (!file) return;
 
-        for (int i = 0; i < matchCount; i++) {
-            matchesList[i].saveToCSV();
-        }
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string temp;
+        int tid;
+        getline(ss, temp, ','); tid = stoi(temp);
+        if (tid != id) continue;
+
+        tournamentID = tid;
+        getline(ss, tournamentName, ',');
+        getline(ss, temp, ','); matchCount = stoi(temp);
+        getline(ss, winner);
+        break;
     }
+    file.close();
+}
 
-    void loadFromCSV() {
-        ifstream file("tournament.csv");
-
-        if (!file) {
-            cout << "File not found!\n";
-            return;
-        }
-
-        char comma;
-
-        file >> tournamentID >> comma;
-        getline(file, tournamentName, ',');
-        file >> matchCount >> comma;
-        getline(file, winner);
-
-        file.close();
-
-        for (int i = 0; i < matchCount; i++) {
-            matchesList[i].loadFromCSV();
-        }
-    }
 };
 
 
@@ -794,7 +769,6 @@ public:
 };
 
 int main() {
-    
     Player p;
     p.AddPlayer();
     p.displayInfo();
@@ -809,11 +783,10 @@ int main() {
     u.AddUmpire();
     u.displayInfo();
 
-    List<Person*> humans; 
+    List<Person> humans;
     humans.addItem(&p);
     humans.addItem(&c);
     humans.addItem(&u);
-
     cout << "\n---All Humans in List---\n";
     humans.displayAll();
 
@@ -826,12 +799,17 @@ int main() {
     cb.addTeamToBoard(t);
     cb.DisplayBoard();
 
-    
     T20Match t20;
     t20.PlayMatch();
     t20.displayMatch();
 
-    
+    RankingSystem rank;
+    rank.updateRankings("Pakistan", "Babar Azam");
+    rank.updateRankings("Pakistan", "Shaheen Afridi");
+    rank.updateRankings("India", "Virat Kohli");
+    rank.updateRankings("Australia", "Pat Cummins");
+    rank.displayRankings();
+
     ICC icc;
     icc.registerBoard(cb);
     icc.organizeTournament();
@@ -840,4 +818,3 @@ int main() {
 
     return 0;
 }
-
