@@ -3,6 +3,8 @@
 #include <string>
 #include <list> 
 #include <fstream>
+#include <type_traits>
+#include <sstream>
 using namespace std;
 
 class Person {
@@ -39,13 +41,22 @@ public:
 
     void AddPlayer() {
         cout << "---Adding Player Details---\n";
-        cout << "Enter Player ID: "; cin >> playerID; cin.ignore();
-        cout << "Enter Player Name: "; getline(cin, name);
-        cout << "Enter Age: "; cin >> age; cin.ignore();
-        cout << "Enter Role: "; getline(cin, role);
-        cout << "Matches Played: "; cin >> matches;
-        cout << "Total Runs: "; cin >> runs;
-        cout << "Total Wickets: "; cin >> wickets;
+        cout << "Enter Player ID: "; 
+        cin >> playerID;
+        cin.ignore();
+        cout << "Enter Player Name: ";
+        getline(cin, name);
+        cout << "Enter Age: "; 
+        cin >> age; 
+        cin.ignore();
+        cout << "Enter Role: "; 
+        getline(cin, role);
+        cout << "Matches Played: "; 
+        cin >> matches;
+        cout << "Total Runs: "; 
+        cin >> runs;
+        cout << "Total Wickets: "; 
+        cin >> wickets;
     }
 
     void UpdateStats() {
@@ -127,7 +138,11 @@ public:
     }
     void displayAll() {
         for(int i = 0; i < count; i++) {
-            items[i].displayInfo();
+            if constexpr (std::is_pointer<T>::value) {
+                items[i]->displayInfo();
+            } else {
+                items[i].displayInfo();
+            }
             cout << endl;
         }
     }
@@ -351,7 +366,7 @@ public:
         file.close();
     }
     
-    void loadFromCSV() {
+  void loadFromCSV() {
     ifstream file("matches.csv");
 
     if (!file) {
@@ -359,16 +374,28 @@ public:
         return;
     }
 
-    char comma;
+    string line;
+    getline(file, line);
 
-    file >> matchID >> comma;
-    getline(file, Team1, ',');
-    getline(file, Team2, ',');
-    getline(file, date, ',');
-    getline(file, result);
+    if (line == "") {
+        cout << "File is empty!\n";
+        return;
+    }
+
+    string temp;
+    stringstream ss(line);
+
+    getline(ss, temp, ',');
+    matchID = stoi(temp);
+
+    getline(ss, Team1, ',');
+    getline(ss, Team2, ',');
+    getline(ss, date, ',');
+    getline(ss, result);
 
     file.close();
 }
+
 
 
 };
@@ -420,6 +447,8 @@ public:
         else
             result = "T20 Match Draw";
         venue.saveToCSV();
+        // also save match details to CSV
+        saveToCSV();
     }
 };
 
