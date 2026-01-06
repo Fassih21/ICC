@@ -77,6 +77,61 @@ public:
     void DisplayPlayer() {
         displayInfo();
     }
+
+    void saveToCSV() {
+    ofstream file("players.csv", ios::app);
+
+    if (!file) {
+        cout << "Error opening file!\n";
+        return;
+    }
+
+    file << playerID << ","
+         << name << ","
+         << age << ","
+         << role << ","
+         << matches << ","
+         << runs << ","
+         << wickets << endl;
+
+    file.close();
+}
+void loadFromCSV() {
+    static ifstream file("players.csv");
+
+    if (!file) {
+        cout << "File not found!\n";
+        return;
+    }
+
+    string line;
+    if (!getline(file, line)) {
+        return;
+    }
+
+    string temp;
+    stringstream ss(line);
+
+    getline(ss, temp, ',');
+    playerID = stoi(temp);
+
+    getline(ss, name, ',');
+
+    getline(ss, temp, ',');
+    age = stoi(temp);
+
+    getline(ss, role, ',');
+
+    getline(ss, temp, ',');
+    matches = stoi(temp);
+
+    getline(ss, temp, ',');
+    runs = stoi(temp);
+
+    getline(ss, temp);
+    wickets = stoi(temp);
+    }
+
 };
 
 class Coach : public Person {
@@ -198,6 +253,33 @@ public:
             cout << endl;
         }
     }
+
+    void saveToCSV() {
+    ofstream file("teams.csv", ios::app);
+
+    if (!file) {
+        cout << "Error opening team file!\n";
+        return;
+    }
+
+    file << TeamID << ","
+         << teamname << ","
+         << country << endl;
+
+    file.close();
+
+    // save players of this team
+    for (int i = 0; i < 11; i++) {
+        if (listofplayers[i].getPlayerID() != 0) {
+            listofplayers[i].saveToCSV();
+        }
+    }
+}
+
+    void loadFromCSV() {
+        // stub: not implemented (simple student fix)
+    }
+
 };
 
 class CricketBoard {
@@ -251,6 +333,60 @@ public:
             listOfTeams[i].DisplayTeam();
         }
     }
+    void saveToCSV() {
+    ofstream file("boards.csv", ios::app);
+
+    if (!file) {
+        cout << "Error opening board file!\n";
+        return;
+    }
+
+    file << boardID << ","
+         << boardName << ","
+         << country << ","
+         << teamCount << endl;
+
+    file.close();
+
+    // save all teams under this board
+    for (int i = 0; i < teamCount; i++) {
+        listOfTeams[i].saveToCSV();
+    }
+}
+
+void loadFromCSV() {
+    ifstream file("boards.csv");
+
+    if (!file) {
+        cout << "Board file not found!\n";
+        return;
+    }
+
+    string line;
+    if (!getline(file, line)) {
+        file.close();
+        return;
+    }
+
+    string temp;
+    stringstream ss(line);
+
+    getline(ss, temp, ',');
+    boardID = stoi(temp);
+
+    getline(ss, boardName, ',');
+    getline(ss, country, ',');
+
+    getline(ss, temp);
+    teamCount = stoi(temp);
+
+    for (int i = 0; i < teamCount; i++) {
+        listOfTeams[i].loadFromCSV();
+    }
+
+    file.close();
+}
+
 };
 
 class Venue {
@@ -291,6 +427,10 @@ public:
 
     void saveToCSV() {
         ofstream file("Venue_Data.csv", ios::app);
+        if (!file) {
+            cout << "Error opening Venue_Data.csv for writing\n";
+            return;
+        }
         file << venueName << "," << country << "," << capacity << "," << pitchCondition << endl;
         file.close();
     }
@@ -452,28 +592,83 @@ public:
     }
 };
 
+
+
 class Tournament {
 private:
     int tournamentID;
     string tournamentName;
     Match matchesList[120];
+    int matchCount;
     string winner;
+
 public:
+    Tournament() {
+        tournamentID = 0;
+        tournamentName = "";
+        matchCount = 0;
+        winner = "";
+    }
+
     void AddMatch() {
-        int matchCount;
         cout << "Enter number of matches to add: ";
         cin >> matchCount;
+
         for (int i = 0; i < matchCount; i++) {
             cout << "\nMatch " << (i + 1) << ":\n";
             matchesList[i].PlayMatch();
         }
     }
+
     void displayResults() {
-        for (int i = 0; i < 120; i++) {
+        for (int i = 0; i < matchCount; i++) {
             matchesList[i].displayMatch();
         }
     }
+
+    void saveToCSV() {
+        ofstream file("tournament.csv");
+
+        if (!file) {
+            cout << "Error opening file!\n";
+            return;
+        }
+
+        file << tournamentID << ","
+             << tournamentName << ","
+             << matchCount << ","
+             << winner << endl;
+
+        file.close();
+
+        for (int i = 0; i < matchCount; i++) {
+            matchesList[i].saveToCSV();
+        }
+    }
+
+    void loadFromCSV() {
+        ifstream file("tournament.csv");
+
+        if (!file) {
+            cout << "File not found!\n";
+            return;
+        }
+
+        char comma;
+
+        file >> tournamentID >> comma;
+        getline(file, tournamentName, ',');
+        file >> matchCount >> comma;
+        getline(file, winner);
+
+        file.close();
+
+        for (int i = 0; i < matchCount; i++) {
+            matchesList[i].loadFromCSV();
+        }
+    }
 };
+
 
 class RankingSystem {
 private:
