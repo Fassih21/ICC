@@ -22,11 +22,20 @@ private:
 
 public:
     Player() {
-        playerID = 0; name = ""; age = 0; role = "";
-        matches = 0; runs = 0; wickets = 0;
+        playerID = 0;
+        name = "";
+        age = 0; 
+        role = "";
+        matches = 0; 
+        runs = 0; 
+        wickets = 0;
     }
 
-    int getPlayerID() { return playerID; }
+    int getPlayerID(){
+
+         return playerID; 
+
+        }
 
     void AddPlayer() {
         cout << "---Adding Player Details---\n";
@@ -65,7 +74,11 @@ private:
     int age;
     int experience;
 public:
-    Coach() { name = ""; age = 0; experience = 0; }
+    Coach(){ 
+    name = ""; 
+    age = 0; 
+    experience = 0; 
+}
 
     void AddCoach() {
         cout << "---Adding Coach Details---\n";
@@ -76,8 +89,7 @@ public:
 
     void displayInfo() override {
         cout << "---Coach Info---\n";
-        cout << "Name: " << name << "\nAge: " << age
-             << "\nExperience: " << experience << " years\n";
+        cout << "Name: " << name << "\nAge: " << age << "\nExperience: " << experience << " years\n";
     }
 };
 
@@ -321,6 +333,44 @@ public:
         cout << "Result: " << result << endl;
         venue.displayVenueInfo();
     }
+
+    void saveToCSV() {
+    ofstream file("matches.csv", ios::app);
+
+    if (!file) {
+        cout << "Error opening file!\n";
+        return;
+    }
+
+        file << matchID << ","
+         << Team1 << ","
+         << Team2 << ","
+         << date << ","
+         << result << endl;
+
+        file.close();
+    }
+    
+    void loadFromCSV() {
+    ifstream file("matches.csv");
+
+    if (!file) {
+        cout << "File not found!\n";
+        return;
+    }
+
+    char comma;
+
+    file >> matchID >> comma;
+    getline(file, Team1, ',');
+    getline(file, Team2, ',');
+    getline(file, date, ',');
+    getline(file, result);
+
+    file.close();
+}
+
+
 };
 
 class T20Match : public Match {
@@ -520,7 +570,7 @@ public:
 };
 
 int main() {
-    // --- Testing Human Entities ---
+    
     Player p;
     p.AddPlayer();
     p.displayInfo();
@@ -535,7 +585,7 @@ int main() {
     u.AddUmpire();
     u.displayInfo();
 
-    List<Person*> humans;  // Use pointers for polymorphism
+    List<Person*> humans; 
     humans.addItem(&p);
     humans.addItem(&c);
     humans.addItem(&u);
@@ -543,7 +593,6 @@ int main() {
     cout << "\n---All Humans in List---\n";
     humans.displayAll();
 
-    // --- Team & Board ---
     Team t;
     t.AddTeam();
     t.DisplayTeam();
@@ -553,12 +602,12 @@ int main() {
     cb.addTeamToBoard(t);
     cb.DisplayBoard();
 
-    // --- T20 Match ---
+    
     T20Match t20;
     t20.PlayMatch();
     t20.displayMatch();
 
-    // --- ICC ---
+    
     ICC icc;
     icc.registerBoard(cb);
     icc.organizeTournament();
@@ -567,3 +616,4 @@ int main() {
 
     return 0;
 }
+
