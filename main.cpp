@@ -1,9 +1,9 @@
 #include <iostream>
-#include <ctime>
 #include <string>
-#include <list> 
 #include <fstream>
 #include <sstream>
+#include <ctime>
+#include <list> 
 using namespace std;
 
 class Person {
@@ -60,9 +60,12 @@ public:
 
     void UpdateStats() {
         int addRuns, addWickets;
-        cout << "Additional Runs: "; cin >> addRuns;
-        cout << "Additional Wickets: "; cin >> addWickets;
-        runs += addRuns; wickets += addWickets;
+        cout << "Additional Runs: "; 
+        cin >> addRuns;
+        cout << "Additional Wickets: "; 
+        cin >> addWickets;
+        runs += addRuns; 
+        wickets += addWickets;
     }
 
     void displayInfo() override {
@@ -124,9 +127,13 @@ public:
 
     void AddCoach() {
         cout << "---Adding Coach Details---\n";
-        cout << "Name: "; cin.ignore(); getline(cin, name);
-        cout << "Age: "; cin >> age;
-        cout << "Experience (years): "; cin >> experience;
+        cout << "Name: ";
+        cin.ignore(); 
+        getline(cin, name);
+        cout << "Age: "; 
+        cin >> age;
+        cout << "Experience (years): "; 
+        cin >> experience;
     }
 
     void displayInfo() override {
@@ -141,13 +148,21 @@ private:
     int age;
     int totalMatches;
 public:
-    Umpire() { name = ""; age = 0; totalMatches = 0; }
+    Umpire() { 
+        name = ""; 
+        age = 0; 
+        totalMatches = 0; 
+    }
 
     void AddUmpire() {
         cout << "---Adding Umpire Details---\n";
-        cout << "Name: "; cin.ignore(); getline(cin, name);
-        cout << "Age: "; cin >> age;
-        cout << "Total Matches Officiated: "; cin >> totalMatches;
+        cout << "Name: "; 
+        cin.ignore(); 
+        getline(cin, name);
+        cout << "Age: "; 
+        cin >> age;
+        cout << "Total Matches Officiated: "; 
+        cin >> totalMatches;
     }
 
     void displayInfo() override {
@@ -570,7 +585,7 @@ public:
         else
             result = "T20 Match Draw";
         venue.saveToCSV();
-        // also save match details to CSV
+        
         saveToCSV();
     }
 };
